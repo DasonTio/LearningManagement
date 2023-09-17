@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Checkbox } from "@mantine/core";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
   return (
@@ -74,12 +75,16 @@ export default function LoginPage() {
 
           <div className="w-4/5 flex flex-col gap-6 mt-5 md:w-[65%] lg:w-[30%] lg:mt-7">
             <button
-              type="submit"
+              type="button"
               className="bg-black text-white font-bold rounded-3xl py-3 hover:bg-[#333333] "
             >
               Log in
             </button>
-            <button className="flex justify-center gap-x-3 bg-[#DDD] font-bold rounded-3xl py-3 hover:bg-[#cacaca]">
+            <button
+              className="flex justify-center gap-x-3 bg-[#DDD] font-bold rounded-3xl py-3 hover:bg-[#cacaca]"
+              type="button"
+              onClick={() => signIn("google")}
+            >
               <Image
                 src="/search.png"
                 alt="google"
