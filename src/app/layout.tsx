@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { MantineProvider } from "@mantine/core";
 import { Provider } from "@/components/Provider";
+import { useState } from "react";
+import ToastNotification from "@/components/ToastNotification";
 
 const inter = Inter({ subsets: ["latin"] });
 

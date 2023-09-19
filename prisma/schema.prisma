@@ -16,5 +16,5 @@ model User {
   name              String?
   password          String
   verified          Boolean @default(false)
-  verification_code String?
+  verification_code String
 }

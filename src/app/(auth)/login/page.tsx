@@ -7,6 +7,9 @@ import { Checkbox } from "@mantine/core";
 import { signIn, useSession } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
+import { useEffect, useState } from "react";
+import ToastNotification from "@/components/ToastNotification";
+import { useRouter } from "next/navigation";
 
 type LoginFormInputs = {
   email: string;
@@ -15,12 +18,16 @@ type LoginFormInputs = {
 };
 
 export default function LoginPage() {
+  const router = useRouter();
+  const [shown, setShown] = useState(false);
+  const [message, setMessage] = useState("");
+  const [title, setTitle] = useState("");
+  const [color, setColor] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormInputs>();
-  const { data: session } = useSession();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     const response = await signIn("credentials", {
@@ -30,9 +37,25 @@ export default function LoginPage() {
       password: data.password,
       remember: data.remember,
     });
+    if (response?.error != null) {
+      setMessage("Error Occured");
+      setShown(true);
+
+      setTimeout(() => {
+        setShown(false);
+      }, 2000);
+    } else {
+      router.push("/");
+    }
   };
   return (
     <main className="w-full h-screen lg:grid lg:grid-cols-2">
+      <ToastNotification
+        message={message}
+        title={title}
+        shown={shown}
+        color={color}
+      />
       <div className="lg:w-full bg-[url('/kampus.png')] bg-cover bg-no-repeat bg-center"></div>
 
       <div className="h-full flex flex-col items-center justify-center overflow-x-hidden bg-[#F8F8FA]">

@@ -3,23 +3,39 @@ import type { NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { BuiltInProviderType } from "next-auth/providers/index";
+import prisma from "@/lib/db";
+import { compareSync } from "bcrypt";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account, credentials, email, profile }) {
       const provider = account?.provider as BuiltInProviderType | undefined;
+
       if (provider == "credentials") {
-        fetch(`${process.env.NEXTAPI_URL!}/api/login`, {});
-        const isVerified = user.email?.includes("@student.pradita");
-        return isVerified ? true : false;
+        const emailUser = await prisma.user.findUnique({
+          where: {
+            email: user.email!,
+          },
+        });
+        if (!emailUser) return false;
+        const passwordAuthenticated = compareSync(
+          credentials!["password"] as string,
+          emailUser.password
+        );
+        return passwordAuthenticated;
       }
-      if (!email || !provider || !profile) return false;
       return true;
     },
     async session({ session, token }) {
+      const user = await prisma.user.findUnique({
+        where: {
+          email: token.email as string,
+        },
+      });
+
       session.user = {
-        name: token.name,
-        email: token.email,
+        name: user!.name,
+        email: user!.email,
       };
       return session;
     },
@@ -28,7 +44,7 @@ export const authOptions: NextAuthOptions = {
     CredentialsProvider({
       credentials: {
         email: { label: "Email", type: "text", placeholder: "jsmith" },
-        password: { label: "Password", type: "password" },
+        password: { label: "Password", type: "text" },
         remember: { label: "Remember", type: "checkbox" },
       },
       async authorize(credentials, req) {
