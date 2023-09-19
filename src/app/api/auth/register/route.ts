@@ -57,9 +57,7 @@ export const POST = async (request: NextRequest) => {
     },
   });
 
-  console.log("TRY");
   try {
-    console.log(data.email);
     const email = await resend.emails.send({
       from: "codingdec14@gmail.com",
       to: [data.email],
@@ -70,10 +68,9 @@ export const POST = async (request: NextRequest) => {
         verification_code: createdUser.verification_code,
       }) as React.ReactElement,
     });
-    console.log(email);
+
     return NextResponse.json(email);
   } catch (error) {
-    console.log(error);
     return NextResponse.json({ error });
   }
 };
