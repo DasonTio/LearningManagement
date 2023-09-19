@@ -8,28 +8,36 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account, credentials, email, profile }) {
       const provider = account?.provider as BuiltInProviderType | undefined;
-      if (!email || !provider || !profile) return false;
       if (provider == "credentials") {
-        console.log("Credentials---");
-        console.log(credentials);
-        const isVerified =
-          credentials?.email.value?.includes("@student.pradita");
+        fetch(`${process.env.NEXTAPI_URL!}/api/login`, {});
+        const isVerified = user.email?.includes("@student.pradita");
         return isVerified ? true : false;
       }
+      if (!email || !provider || !profile) return false;
       return true;
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
+      session.user = {
+        name: token.name,
+        email: token.email,
+      };
       return session;
     },
   },
   providers: [
     CredentialsProvider({
       credentials: {
-        username: { label: "Username", type: "text", placeholder: "jsmith" },
+        email: { label: "Email", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
+        remember: { label: "Remember", type: "checkbox" },
       },
       async authorize(credentials, req) {
-        return null;
+        return {
+          id: "1",
+          email: credentials?.email,
+          password: credentials?.password,
+          remember: credentials?.remember,
+        };
       },
     }),
     GoogleProvider({

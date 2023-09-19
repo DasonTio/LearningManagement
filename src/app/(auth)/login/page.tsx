@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Checkbox } from "@mantine/core";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
 
 type LoginFormInputs = {
   email: string;
@@ -14,10 +15,14 @@ type LoginFormInputs = {
 };
 
 export default function LoginPage() {
-  const { register, handleSubmit } = useForm<LoginFormInputs>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormInputs>();
+  const { data: session } = useSession();
 
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
-    console.log(data);
     const response = await signIn("credentials", {
       redirect: false,
       callbackUrl: "/",
@@ -25,7 +30,6 @@ export default function LoginPage() {
       password: data.password,
       remember: data.remember,
     });
-    console.log(response);
   };
   return (
     <main className="w-full h-screen lg:grid lg:grid-cols-2">
@@ -57,12 +61,32 @@ export default function LoginPage() {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="w-4/5 flex flex-col gap-2 md:w-[65%] lg:w-[30%]">
-            <label htmlFor="email">Email</label>
+            <label
+              htmlFor="email"
+              className="flex justify-between items-end w-full"
+            >
+              Email
+              <ErrorMessage
+                errors={errors}
+                name="email"
+                render={({ message }) => (
+                  <span className="text-xs text-red-400 ">
+                    &nbsp;&nbsp;{message}
+                  </span>
+                )}
+              />
+            </label>
             <input
               className="h-[35px] border border-[#CED4DA] px-3 py-5 rounded-md"
               type="text"
               id="email"
-              {...register("email", { required: true })}
+              {...register("email", {
+                required: true,
+                pattern: {
+                  value: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/,
+                  message: "Please insert real email",
+                },
+              })}
             />
           </div>
 

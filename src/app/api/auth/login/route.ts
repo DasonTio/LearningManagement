@@ -1,27 +1,30 @@
 import prisma from "@/lib/db";
-import { getServerSession } from "next-auth";
-import { NextResponse } from "next/server";
+import z, { string } from "zod";
+import { NextResponse, NextRequest } from "next/server";
 import { authOptions } from "../[...nextauth]/route";
 
-export const GET = async (request: Request) => {
-  const session = await getServerSession(authOptions);
+const verifiedRequestSchema = z.object({
+  id: z.string().nonempty(),
+  c: z.string().nonempty(),
+});
 
-  const { searchParams } = new URL(request.url);
-  const paramsId = searchParams.get("id");
-  const paramsCode = searchParams.get("c");
-
-  if (!paramsId) {
+export const GET = async (request: NextRequest) => {
+  const data = await request.json();
+  const isVerified = verifiedRequestSchema.safeParse(data);
+  if (!isVerified) {
     return NextResponse.json({
-      message: "",
+      message: "Not A Valid Link",
     });
   }
   const res = await prisma.user.findFirst({
     where: {
-      id: parseInt(paramsId),
-      verification_code: paramsCode,
+      id: parseInt(data.id),
+      verification_code: data.c,
     },
   });
-
   return NextResponse.json(res);
 };
-export const POST = async () => {};
+// export const POST = async (request: NextRequest) => {
+//   const data = await request.json();
+//   return NextResponse.json({});
+// };

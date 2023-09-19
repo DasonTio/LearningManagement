@@ -26,6 +26,15 @@ export default function RegisterPage() {
 
         <form action="" className="w-screen flex flex-col items-center mt-5">
           <div className="w-4/5 flex flex-col gap-2 md:w-[65%] lg:w-[30%]">
+            <label htmlFor="name">Name</label>
+            <input
+              className="h-[35px] border border-[#CED4DA] px-3 py-5 rounded-md"
+              type="text"
+              id="name"
+            />
+          </div>
+
+          <div className="w-4/5 flex flex-col mt-5 gap-2 md:w-[65%] lg:w-[30%]">
             <label htmlFor="email">Email</label>
             <input
               className="h-[35px] border border-[#CED4DA] px-3 py-5 rounded-md"
