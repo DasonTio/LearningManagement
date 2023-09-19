@@ -6,6 +6,7 @@ import { compareSync, genSaltSync, hashSync } from "bcrypt";
 
 import { VerificationEmail } from "@/components/verification-email";
 import { Resend } from "resend";
+import { createHash, randomBytes } from "crypto";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -16,7 +17,34 @@ const schema = z.object({
 });
 
 export const GET = async (request: NextRequest) => {
-  return NextResponse.json({});
+  const search = new URL(request.url).searchParams;
+  const code = search.get("c");
+
+  const user = await prisma.user.findFirst({
+    where: {
+      verification_code: code as string,
+    },
+  });
+
+  if (!user) {
+    return NextResponse.json({
+      message: "No Valid User",
+      status: 401,
+    });
+  }
+  await prisma.user.update({
+    data: {
+      verified: true,
+    },
+    where: {
+      id: user.id,
+    },
+  });
+
+  return NextResponse.json({
+    message: "User Verified",
+    status: 200,
+  });
 };
 
 export const POST = async (request: NextRequest) => {
@@ -47,7 +75,11 @@ export const POST = async (request: NextRequest) => {
     });
   }
 
-  const verification_code = hashSync(data.email, genSaltSync(10));
+  const verification_code = createHash("sha1")
+    .update(data.email)
+    .update(randomBytes(32))
+    .digest("hex");
+
   const createdUser = await prisma.user.create({
     data: {
       name: data.name,
@@ -59,12 +91,11 @@ export const POST = async (request: NextRequest) => {
 
   try {
     const email = await resend.emails.send({
-      from: "codingdec14@gmail.com",
+      from: "no-reply@hakusho.co",
       to: [data.email],
       subject: "Verification",
       text: `Name: ${data.name}\nEmail: ${data.email}`,
       react: VerificationEmail({
-        user_id: createdUser.id.toString(),
         verification_code: createdUser.verification_code,
       }) as React.ReactElement,
     });
