@@ -1,7 +1,6 @@
 import prisma from "@/lib/db";
-import z, { string } from "zod";
+import z from "zod";
 import { NextResponse, NextRequest } from "next/server";
-import { authOptions } from "../[...nextauth]/route";
 
 const verifiedRequestSchema = z.object({
   id: z.string().nonempty(),
