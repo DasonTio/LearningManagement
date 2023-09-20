@@ -4,7 +4,7 @@ import { signOut, useSession } from "next-auth/react";
 import Image from "next/image";
 import MainContainer from "@/components/MainContainer";
 import { useEffect, useState } from "react";
-import { LectureLink } from "./lecture/page";
+import { LectureLink } from "@/components/LectureLink";
 
 function DashboardPage() {
   const { data: session } = useSession();
