@@ -50,7 +50,9 @@ export default function LoginPage() {
   };
 
   const onSignIn = async () => {
-    const response = await signIn("google");
+    const response = await signIn("google", {
+      callbackUrl: process.env.NEXTAUTH_URL,
+    });
     // if(response?.status)
     router.push("/");
   };

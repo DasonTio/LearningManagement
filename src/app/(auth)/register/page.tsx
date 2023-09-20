@@ -49,7 +49,9 @@ export default function RegisterPage() {
   };
 
   const onSignIn = async () => {
-    await signIn("google");
+    const response = await signIn("google", {
+      callbackUrl: process.env.NEXTAUTH_URL,
+    });
     router.push("/");
   };
 
