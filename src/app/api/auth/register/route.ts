@@ -4,7 +4,7 @@ import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import { compareSync, genSaltSync, hashSync } from "bcrypt";
 
-import { VerificationEmail } from "@/components/verification-email";
+import { VerificationEmail } from "@/components/VerificationEmail";
 import { Resend } from "resend";
 import { createHash, randomBytes } from "crypto";
 
