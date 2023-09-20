@@ -34,7 +34,7 @@ export default function LoginPage() {
   const onSubmit: SubmitHandler<LoginFormInputs> = async (data) => {
     const response = await signIn("credentials", {
       redirect: false,
-      callbackUrl: "/",
+      callbackUrl: `${process.env.NEXT_PUBLIC_API}`,
       email: data.email,
       password: data.password,
       remember: data.remember,
@@ -50,10 +50,10 @@ export default function LoginPage() {
       router.push("/");
     }
   };
-  const { data: session } = useSession();
-  if (session?.user) {
-    router.push("/");
-  }
+  // const { data: session } = useSession();
+  // if (session?.user) {
+  //   router.push(`${process.env.NEXT_PUBLIC_API}`);
+  // }
   return (
     <main className="w-full h-screen lg:grid lg:grid-cols-2">
       <ToastNotification
@@ -156,7 +156,7 @@ export default function LoginPage() {
               type="button"
               onClick={() =>
                 signIn("google", {
-                  callbackUrl: "/",
+                  callbackUrl: `${process.env.NEXT_PUBLIC_API}`,
                 })
               }
             >

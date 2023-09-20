@@ -31,7 +31,7 @@ export default function RegisterPage() {
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API!}/api/auth/register`,
+      `${process.env.NEXT_PUBLIC_API}/api/auth/register`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -44,14 +44,14 @@ export default function RegisterPage() {
       setShown(true);
       setTimeout(() => setShown(false), 2000);
     } else {
-      router.push("/login");
+      router.push(`${process.env.NEXT_PUBLIC_API}/login`);
     }
   };
 
-  const { data: session } = useSession();
-  if (session?.user) {
-    router.push("/");
-  }
+  // const { data: session } = useSession();
+  // if (session?.user) {
+  //   router.push("/");
+  // }
 
   return (
     <main className="w-full h-screen lg:grid lg:grid-cols-2">
@@ -161,7 +161,7 @@ export default function RegisterPage() {
               className="flex justify-center gap-x-3 bg-[#DDD] font-bold rounded-3xl py-3 hover:bg-[#cacaca]"
               onClick={() =>
                 signIn("google", {
-                  callbackUrl: "/",
+                  callbackUrl: `${process.env.NEXT_PUBLIC_API}`,
                 })
               }
             >

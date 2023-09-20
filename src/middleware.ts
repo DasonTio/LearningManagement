@@ -10,7 +10,9 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
   if (!token) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(
+      new URL(`${process.env.NEXT_PUBLIC_API}/login`)
+    );
   }
   return response;
 }
