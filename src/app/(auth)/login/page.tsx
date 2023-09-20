@@ -9,7 +9,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { useEffect, useState } from "react";
 import ToastNotification from "@/components/ToastNotification";
-import { useRouter } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
+import { NextResponse } from "next/server";
+import { getToken } from "next-auth/jwt";
 
 type LoginFormInputs = {
   email: string;
@@ -48,15 +50,10 @@ export default function LoginPage() {
       router.push("/");
     }
   };
-
-  const onSignIn = async () => {
-    const response = await signIn("google", {
-      callbackUrl: process.env.NEXTAUTH_URL,
-    });
-    // if(response?.status)
+  const { data: session } = useSession();
+  if (session?.user) {
     router.push("/");
-  };
-
+  }
   return (
     <main className="w-full h-screen lg:grid lg:grid-cols-2">
       <ToastNotification
@@ -157,7 +154,11 @@ export default function LoginPage() {
             <button
               className="flex justify-center gap-x-3 bg-[#DDD] font-bold rounded-3xl py-3 hover:bg-[#cacaca]"
               type="button"
-              onClick={onSignIn}
+              onClick={() =>
+                signIn("google", {
+                  callbackUrl: "/",
+                })
+              }
             >
               <Image
                 src="/search.png"

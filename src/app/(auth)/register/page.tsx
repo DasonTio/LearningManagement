@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import ToastNotification from "@/components/ToastNotification";
@@ -48,12 +48,10 @@ export default function RegisterPage() {
     }
   };
 
-  const onSignIn = async () => {
-    const response = await signIn("google", {
-      callbackUrl: process.env.NEXTAUTH_URL,
-    });
+  const { data: session } = useSession();
+  if (session?.user) {
     router.push("/");
-  };
+  }
 
   return (
     <main className="w-full h-screen lg:grid lg:grid-cols-2">
@@ -161,7 +159,11 @@ export default function RegisterPage() {
             <button
               type="button"
               className="flex justify-center gap-x-3 bg-[#DDD] font-bold rounded-3xl py-3 hover:bg-[#cacaca]"
-              onClick={onSignIn}
+              onClick={() =>
+                signIn("google", {
+                  callbackUrl: "/",
+                })
+              }
             >
               <Image
                 src="/search.png"
