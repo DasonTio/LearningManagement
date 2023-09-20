@@ -30,7 +30,6 @@ export default function RegisterPage() {
   } = useForm<RegisterFormInputs>();
 
   const onSubmit: SubmitHandler<RegisterFormInputs> = async (data) => {
-    console.log(data);
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API!}/api/auth/register`,
       {
@@ -47,6 +46,11 @@ export default function RegisterPage() {
     } else {
       router.push("/login");
     }
+  };
+
+  const onSignIn = async () => {
+    await signIn("google");
+    router.push("/");
   };
 
   return (
@@ -155,7 +159,7 @@ export default function RegisterPage() {
             <button
               type="button"
               className="flex justify-center gap-x-3 bg-[#DDD] font-bold rounded-3xl py-3 hover:bg-[#cacaca]"
-              onClick={() => signIn("google")}
+              onClick={onSignIn}
             >
               <Image
                 src="/search.png"

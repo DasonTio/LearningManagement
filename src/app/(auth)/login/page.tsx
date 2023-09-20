@@ -48,6 +48,13 @@ export default function LoginPage() {
       router.push("/");
     }
   };
+
+  const onSignIn = async () => {
+    const response = await signIn("google");
+    // if(response?.status)
+    router.push("/");
+  };
+
   return (
     <main className="w-full h-screen lg:grid lg:grid-cols-2">
       <ToastNotification
@@ -148,7 +155,7 @@ export default function LoginPage() {
             <button
               className="flex justify-center gap-x-3 bg-[#DDD] font-bold rounded-3xl py-3 hover:bg-[#cacaca]"
               type="button"
-              onClick={() => signIn("google")}
+              onClick={onSignIn}
             >
               <Image
                 src="/search.png"

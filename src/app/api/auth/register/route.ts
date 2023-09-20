@@ -56,12 +56,6 @@ export const POST = async (request: NextRequest) => {
       status: 422,
     });
   }
-  // if (!data.email.includes("@student.pradita")) {
-  //   return NextResponse.json({
-  //     message: "Please input the correct email",
-  //     status: 422,
-  //   });
-  // }
   const routeUser = await prisma.user.findUnique({
     where: {
       email: data.email,
