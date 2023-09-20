@@ -13,9 +13,7 @@ export const GET = async (request: NextRequest) => {
       message: "You have not seen any material yet",
     });
   }
-  return NextResponse.json({
-    data: response,
-  });
+  return NextResponse.json(response);
 };
 
 export const POST = async (request: NextRequest) => {
