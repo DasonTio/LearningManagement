@@ -1,31 +1,19 @@
 "use client";
-import { AppShell, Navbar, Header } from "@mantine/core";
+
+import { signOut, useSession } from "next-auth/react";
+import Image from "next/image";
+import MainContainer from "@/components/MainContainer";
 
 function DashboardPage() {
+  const { data: session } = useSession();
+
   return (
-    <AppShell
-      padding="md"
-      navbar={
-        <Navbar width={{ base: 300 }} height={"h-screen"} p="xs">
-          {/* <li className="list-none" >Hello</li> */}
-        </Navbar>
-      }
-      header={
-        <Header height={60} p="xs">
-          {/* Header content */}
-        </Header>
-      }
-      styles={(theme) => ({
-        main: {
-          backgroundColor:
-            theme.colorScheme === "dark"
-              ? theme.colors.dark[8]
-              : theme.colors.gray[0],
-        },
-      })}
-    >
-      {/* Your application here */}
-    </AppShell>
+    <MainContainer>
+      <h1 className="text-3xl font-bold">Dashboard</h1>
+      <section className="border rounded-md grid place-items-center h-[20vh] font-bold">
+        You have not seen any material yet
+      </section>
+    </MainContainer>
   );
 }
 export default DashboardPage;
