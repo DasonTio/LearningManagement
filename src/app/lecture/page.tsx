@@ -8,7 +8,7 @@ interface LectureLinkProps {
   title: string;
 }
 
-const LectureLink = ({ href, title }: LectureLinkProps) => {
+export const LectureLink = ({ href, title }: LectureLinkProps) => {
   return (
     <Link
       href={href}

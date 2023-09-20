@@ -18,3 +18,10 @@ model User {
   verified          Boolean @default(false)
   verification_code String
 }
+
+model Lectures {
+  id     Int     @id @default(autoincrement())
+  link   String
+  title  String
+  isSeen Boolean @default(false)
+}

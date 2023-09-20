@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "email": "email dev --port 3600",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "download-webviewer": "npx @pdftron/webviewer-downloader"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -35,6 +36,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.46.1",
+    "react-pdf": "^7.3.3",
     "resend": "^1.1.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
