@@ -1,6 +1,12 @@
 import React from "react";
+import { Container } from "@mantine/core";
+
 const EkstranetPage = () => {
-  return <h1>Ekstranet</h1>;
+  return (
+    <Container className="w-full">
+      <h1>Test</h1>
+    </Container>
+  );
 };
 
 export default EkstranetPage;
